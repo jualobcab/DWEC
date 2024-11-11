@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perros</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+</head>
+<header>
+    <h2>Ejercicio Perros</h2>
+</header>
+<body>
+    <script src="perros.js" defer></script>
+    <div>
+        <div>
+            <label for="nombrePerro">Nombre del Perro:</label>
+            <input type="text" name="nombrePerro" id="nombrePerro">
+            <label for="edadPerro">Edad del perro:</label>
+            <input type="text" name="edadPerro" id="edadPerro">
+            <label for="razaPerro">Raza del perro:</label>
+            <input type="text" name="razaPerro" id="razaPerro">
+        
+            <!-- Botones -->
+            <button onclick="anyadirPerro()">Añadir</button>
+            <button onclick="ordenarPorInsercion()">Ordenar por inserción</button>
+            <button onclick="ordenarPorEdad()">Ordenar por edad</button>
+            <button onclick="ordenarPorRaza()">Ordenar por raza</button>
+        </div>
+
+        <div class="notice" id="divLista">
+            <!-- Aquí irá el listado de perros -->
+        </div>
+    </div>
+</body>
+</html>
