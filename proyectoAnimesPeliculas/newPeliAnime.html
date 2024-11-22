@@ -6,19 +6,18 @@
     <title>Tarea1 Cliente</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styleForm.css">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
 <body>
   <script src="script.js"></script>
-  <!-- Cabecera con titulo -->
+  <script src="scriptFormulario.js"></script>
   <header class="text-center py-4 bg-dark text-white">
     <h1>Tarea1 Cliente</h1>
     <p>Bienvenido a la plataforma de películas y animes</p>
   </header>
-  <!-- Zona de navegación con boton de películas; animes; y una opción 
-    para añadir animes o películas -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Inicio</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,46 +26,55 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" id="menuPelicula">Películas</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="menuAnime">Animes</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="newPeliAnime.html">Añadir</a>
+                <a class="nav-link" id="menuPelicula" href="index.html">Inicio</a>
             </li>
         </ul>
     </div>
   </nav>
-    <!-- Arriba una zona de búsqueda a la derecha y un menu desplegable para
-      marcar las categorías para filtrar , y otro checkbox de peliculas y animes -->
-    <!-- Meter un botón de ordenación abajo  : de <>, de ><, alfabéticamente e 
-     alfabéticamente inverso -->
-    <!-- Que default aparezcan las películas ordenadas alfabéticamente 
-      (hacer las pelis con cards con su hover correspondiente)-->
   <main>
-    <div class="zonaFiltrar">
+    <div class="formulario">
       <form id="formulario" name="formulario">
+        <h5>Añadir nuevo registro</h5>
+        <fieldset>
+            <ul>
+                <li>
+                    <input type="radio" name="radioFormulario" id="radioPelicula" value="Pelicula" checked>
+                    <label for="radioPelicula">Pelicula</label>
+                </li>
+                <li>
+                    <input type="radio" name="radioFormulario" id="radioAnime" value="Anime">
+                    <label for="radioAnime">Anime</label>
+                </li>
+            </ul>
+        </fieldset>
         <div>
-          <input type="radio" value="Pelicula" name="tipo" id="pelicula" onclick="listarGeneros('Pelicula')" checked>
-          <label for="pelicula">Pelicula</label>
-          <input type="radio" value="Anime" name="tipo" id="anime" onclick="listarGeneros('Anime')">
-          <label for="anime">Anime</label>
+            <label for="titulo">· Titulo:</label>
+            <input type="text" name="titulo" id="titulo" required>
+        </div>
+        <fieldset id="fieldsetGeneros">
+            <legend>Generos</legend>
+            <ul id="listaGeneros">
+
+            </ul>
+        </fieldset>
+        <div>
+            <label for="anyo">· Año:</label>
+            <input type="text" name="anyo" id="anyo" required>
+        </div>
+        <div class="notice" id="duracionEpisodios">
+
         </div>
         <div>
-          <label>Genero</label>
-          <select id="generos">
-            
-          </select>
-          <input type="submit" value="Filtrar" name="filtrar" id="botonFiltrar">
+            <input type="checkbox" name="favorito" id="favorito" value="favorito">
+            <label for="favorito">Favorito</label>
         </div>
+        <div>
+            <label for="puntuacion">· Puntuación:</label>
+            <input type="number" name="puntuacion" id="puntuacion" required>
+        </div>
+        <input type="submit" name="anadir" id="anadir" value="Crear Instancia">
       </form>
-    </div>
-    <div class="notice listado" id="listado">
-      
     </div>
   </main>
 </body>
 </html>
-
-<!-- https://blog.hubspot.es/website/menu-desplegable-html -->

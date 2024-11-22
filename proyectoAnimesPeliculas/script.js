@@ -130,8 +130,42 @@ class Biblioteca {
     }
 
     marcarFavorito(id, tipo){
-        this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}s`][id].setFavorito();
-        // Hacer que cargue al localStorage la biblioteca, para que se guarde el cambio hecho
+        let longitud = this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}s`].length;
+        for (var i = 0; i<longitud ; i++){
+            if (this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}s`][i].id == id){
+                this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}s`][i].favorito = !this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}s`][i].favorito;
+                break;
+            }
+        }
+        
+        guardarBibliotecaEnLocalStorage(this);
+        pintarLista(this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}s`],tipo);
+    }
+
+    // Encontrar ID mas alta vacia
+    idLibre(tipo){
+        let longitud = this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}s`].length;
+        let res = 0;
+
+        for(var i = 1; i<=longitud; i++){
+            let encontrado = false;
+            for(var j = 0; j<longitud; j++){
+                if (this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}s`][j].id == i){
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado){
+                res = 1;
+                break;
+            }
+        }
+
+        if (res == 0){
+            res = longitud+1;
+        }
+
+        return res;
     }
 }
 
@@ -226,7 +260,7 @@ function pintarLista(array, tipo) {
             res += "<p class='card-text'>· Duracion: "+instancia.duracion+"</p>";
         }
         res += "<div class='puntuacionYFavorito'><p class='card-text puntuacion'>"+instancia.puntuacion+"</p>";
-        res += "<label class='like'><input class='corazon' type='checkbox' onclick='biblioteca.marcarFavorito("+instancia.id+", "+tipo+")'";
+        res += '<label class="like"><input class="corazon" type="checkbox" onclick="biblioteca.marcarFavorito('+instancia.id+', \''+tipo+'\')"';
         if (instancia.favorito){
             res += "checked='true'";
         }
@@ -255,7 +289,8 @@ function listarGeneros(tipo){
 }
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    document.getElementById('botonFiltrar').addEventListener("click", (event) => {
+    if (document.getElementById('botonFiltrar')){
+        document.getElementById('botonFiltrar').addEventListener("click", (event) => {
         event.preventDefault();
         let tipo = formulario.tipo.value;
         let genero = formulario.generos.value;
@@ -263,15 +298,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
         biblioteca.clasificarPorPuntuacion(tipo);
 
         pintarLista(biblioteca.filtrarPorGeneros([genero],tipo),tipo);
-    });
-    listarGeneros("Pelicula");
-
-    document.getElementById('menuPelicula').addEventListener("click", (event) => {
+        });
+        listarGeneros("Pelicula");
+    }
+    
+    if (document.getElementById('menuPelicula')){
+        document.getElementById('menuPelicula').addEventListener("click", (event) => {
         pintarLista(biblioteca['listaPeliculas'], "Pelicula");
-    })
-    document.getElementById('menuAnime').addEventListener("click", (event) => {
+        })
+    }
+    
+    if (document.getElementById('menuAnime')){
+        document.getElementById('menuAnime').addEventListener("click", (event) => {
         pintarLista(biblioteca['listaAnimes'], "Anime");
-    })
+        })
+    }
 });
 
 ////////////////////////////////////////////////////////
