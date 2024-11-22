@@ -108,10 +108,10 @@ class Biblioteca {
     /// Filtraje
     filtrarPorGeneros(listaGeneros,tipo){ // tipo debe ser pelicula o anime
         let res = [];
-        let coincide = false
+        let coincide = false;
+        let linea = `lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}s`;
 
-        this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}}s`]
-            .forEach(element => {
+        this[linea].forEach(element => {
                 coincide = false;
                 element.generos.forEach(genero => {
                     if(listaGeneros.includes(genero)){
@@ -126,11 +126,11 @@ class Biblioteca {
     }
 
     clasificarPorPuntuacion(tipo){
-        return this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}}s`].sort((a,b) => b - a);
+        return this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}s`].sort((a,b) => b.puntuacion - a.puntuacion);
     }
 
     marcarFavorito(id, tipo){
-        this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}}s`][id].setFavorito();
+        this[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}s`][id].setFavorito();
         // Hacer que cargue al localStorage la biblioteca, para que se guarde el cambio hecho
     }
 }
@@ -199,10 +199,10 @@ function botonBorrado(id, tipo) {
     }
 
     guardarBibliotecaEnLocalStorage(biblioteca);
-    pintarLista(biblioteca[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}}s`]);
+    pintarLista(biblioteca[`lista${tipo.charAt(0).toUpperCase()+tipo.toLowerCase().slice(1)}s`], tipo);
 }
 
-function pintarLista(array) {
+function pintarLista(array, tipo) {
     let res = "";
 
     array = array.sort((a,b) => b.puntuacion - a.puntuacion);
@@ -210,8 +210,8 @@ function pintarLista(array) {
     array.forEach(instancia => {
         res += "<div class='card' style='width: 18rem;'><div class='card-body'>";
         res += "<div class='tituloBorrado'><h5 class='card-title'>"+instancia.titulo+"</h5>";
-        res += "<div class='icon-delete' onclick='botonBorrado("+instancia.id+",'"+instancia.obtenerTipo()+"')'></div></div>";
-        res += "<h6 class='card-subtitle mb-2 text-muted'>"+instancia.obtenerTipo()+"</h6>";
+        res += '<div class="icon-delete" onclick="botonBorrado('+instancia.id+',\''+tipo+'\')"></div></div>';
+        res += "<h6 class='card-subtitle mb-2 text-muted'>"+tipo+"</h6>";
         res += "<fieldset><legend>Géneros:</legend><ul>";
         
         instancia.generos.forEach(genero => {
@@ -219,14 +219,14 @@ function pintarLista(array) {
         })
         
         res += "</ul></fieldset><p class='card-text'>·Año: "+instancia.anyo+"</p>";
-        if (instancia.obtenerTipo() == 'Anime'){
+        if (tipo == 'Anime'){
             res += "<p class='card-text'>·Episodios: "+instancia.episodios+"</p>";
         }
         else {
             res += "<p class='card-text'>· Duracion: "+instancia.duracion+"</p>";
         }
         res += "<div class='puntuacionYFavorito'><p class='card-text puntuacion'>"+instancia.puntuacion+"</p>";
-        res += "<label class='like'><input class='corazon' type='checkbox' onclick='biblioteca.marcarFavorito("+instancia.id+", "+instancia.obtenerTipo()+")'";
+        res += "<label class='like'><input class='corazon' type='checkbox' onclick='biblioteca.marcarFavorito("+instancia.id+", "+tipo+")'";
         if (instancia.favorito){
             res += "checked='true'";
         }
@@ -260,15 +260,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
         let tipo = formulario.tipo.value;
         let genero = formulario.generos.value;
 
-        pintarLista(biblioteca.filtrarPorGeneros([genero],tipo).clasificarPorPuntuacion(tipo));
+        biblioteca.clasificarPorPuntuacion(tipo);
+
+        pintarLista(biblioteca.filtrarPorGeneros([genero],tipo),tipo);
     });
     listarGeneros("Pelicula");
 
     document.getElementById('menuPelicula').addEventListener("click", (event) => {
-        pintarLista(biblioteca['listaPeliculas']);
+        pintarLista(biblioteca['listaPeliculas'], "Pelicula");
     })
     document.getElementById('menuAnime').addEventListener("click", (event) => {
-        pintarLista(biblioteca['listaAnimes']);
+        pintarLista(biblioteca['listaAnimes'], "Anime");
     })
 });
 
