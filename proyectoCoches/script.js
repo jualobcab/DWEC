@@ -7,6 +7,7 @@
 let listaVehiculos=[];
 
 ////////////////////  Constantes  //////////////////////
+// Tipos de combustibles y sus porcentajes de impuestos, lo cual ayuda a poder modificiarlo con tranquilidad en el futuro
 const Combustible = Object.freeze({
     Gasolina:10,
     Diesel:15,
@@ -34,7 +35,7 @@ class Vehiculo {
         this.stock = !this.stock;
     }
     obtenerDescripcion(){
-        res = "Marca: "+this.marca+", Modelo: "+this.modelo+", Año: "+this.anyo+", Precio: "+this.precio+", Stock: ";
+        let res = "Marca: "+this.marca+", Modelo: "+this.modelo+", Año: "+this.anyo+", Precio: "+this.precio+", Stock: ";
         if (this.stock){
             res += "Disponible"
         }
@@ -57,7 +58,7 @@ class Coche extends Vehiculo {
         return this.precio*(Combustible[this.tipoCombustible]/100)
     }
     obtenerDescripcion(){
-        res = "Marca: "+this.marca+", Modelo: "+this.modelo+", Año: "+this.anyo+", Precio: "+this.precio+", Stock: ";
+        let res = "Marca: "+this.marca+", Modelo: "+this.modelo+", Año: "+this.anyo+", Precio: "+this.precio+", Stock: ";
         if (this.stock){
             res += "Disponible"
         }
@@ -86,7 +87,7 @@ class Motocicleta extends Vehiculo {
         }
     }
     obtenerDescripcion(){
-        res = "Marca: "+this.marca+", Modelo: "+this.modelo+", Año: "+this.anyo+", Precio: "+this.precio+", Stock: ";
+        let res = "Marca: "+this.marca+", Modelo: "+this.modelo+", Año: "+this.anyo+", Precio: "+this.precio+", Stock: ";
         if (this.stock){
             res += "Disponible"
         }
@@ -101,8 +102,76 @@ class Motocicleta extends Vehiculo {
 ////////////////      FUNCIONES     ///////////////////
 function crearCoche(marca,modelo,anyo,precio,stock,numeroPuertas,matricula,tipoCombustible){
     let resCoche = new Coche(marca,modelo,anyo,precio,stock,numeroPuertas,matricula,tipoCombustible);
+    let matriculaEncontrada = false;
 
+    listaVehiculos.forEach(
+        (v)=>{
+            if (resCoche.matricula == v.matricula){
+                matriculaEncontrada = true;
+            }
+        });
+
+    if (!matriculaEncontrada){
+        listaVehiculos.push(resCoche);
+    }
 }
 function crearMotocicleta(marca,modelo,anyo,precio,stock,matricula,cilindrada,tipo) {
+    let resMotocicleta = new Motocicleta(marca,modelo,anyo,precio,stock,matricula,cilindrada,tipo);
+    let matriculaEncontrada = false;
+
+    listaVehiculos.forEach(
+        (v)=>{
+            if (resMotocicleta.matricula == v.matricula){
+                matriculaEncontrada = true;
+            }
+        });
+
+    if (!matriculaEncontrada){
+        listaVehiculos.push(resMotocicleta);
+    }
+}
+function listarVehiculos(array){
+    let res = "<ul>";
+
+    array.forEach(
+        (v)=>{
+                res += "<li>";
+                res += v.obtenerDescripcion();
+                res += "</li>";
+        });
+    res += "</ul>";
+
+    return res;
+}
+
+function venderVehiculo(array, matricula){
+    array.forEach(
+        (v)=>{
+            if(v.matricula == matricula){
+                v.vender();
+            }
+        });
+}
+
+function calcularImpuestosTotal(array){
+    let res = 0;
+    array.forEach(
+        (v)=>{
+            if (v.stock){
+                res += v.calcularImpuestos();
+            }
+        });
+    return res;
+}
+
+// Funcion auxiliar para agilizar la introducción de datos de muestreo para realizar pruebas
+function pruebaProfesor(){
+    crearCoche("Toyota","Supra",2001,30000,true,5,"111111A","Gasolina");
+    crearCoche("Honda","Civic",2002,20000,false,4,"222222A","Diesel");
+    crearCoche("Fiat","Multipla",2003,10000,true,5,"333333A","Gasolina");
+
+    crearMotocicleta("Yamaha","MT07",2004,5000,false,"MOTO1",500,"Deportiva");
+    crearMotocicleta("Honda","CBR",2005,8000,true,"MOTO2",600,"Custom");
+    crearMotocicleta("Suzuki","GSXR",2006,10000,true,"MOTO3",400,"Adventure");
 
 }
